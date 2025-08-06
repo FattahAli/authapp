@@ -15,6 +15,28 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
+    // Get token from localStorage
+    if (typeof window !== 'undefined') {
+      const authData = localStorage.getItem('auth');
+      if (authData) {
+        try {
+          const { token } = JSON.parse(authData);
+          if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+            console.log('API Request: Added Authorization header');
+          }
+        } catch (error) {
+          console.error('Error parsing auth data:', error);
+        }
+      }
+    }
+    
+    console.log('API Request:', {
+      method: config.method,
+      url: config.url,
+      withCredentials: config.withCredentials,
+      headers: config.headers
+    });
     return config;
   },
   (error) => {

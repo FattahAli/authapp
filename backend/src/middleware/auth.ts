@@ -12,11 +12,18 @@ export const authenticateToken = async (
 
   try {
     console.log('Auth middleware: Checking authentication');
-    console.log('Auth middleware: Cookies:', req.cookies);
-    const token = req.cookies.token;
+    console.log('Auth middleware: Authorization header:', req.headers.authorization);
+    
+    // Check for Authorization header first, then cookies as fallback
+    let token = req.headers.authorization?.replace('Bearer ', '');
+    
+    if (!token) {
+      console.log('Auth middleware: No token found in Authorization header, checking cookies');
+      token = req.cookies.token;
+    }
 
     if (!token) {
-      console.log('Auth middleware: No token found in cookies');
+      console.log('Auth middleware: No token found in cookies or Authorization header');
       return res.status(401).json({ message: 'Access token required' });
     }
 

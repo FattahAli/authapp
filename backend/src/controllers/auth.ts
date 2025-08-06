@@ -184,24 +184,16 @@ export const login = async (req: Request, res: Response) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     };
     
-    console.log('Login: Setting cookie with options:', cookieOptions);
-    console.log('Login: Token to set:', token.substring(0, 20) + '...');
-    
-    try {
-      res.cookie('token', token, cookieOptions);
-      console.log('Login: Cookie set successfully');
-    } catch (cookieError) {
-      console.error('Login: Error setting cookie:', cookieError);
-    }
-    
     console.log('Login: JWT token generated, length:', token.length);
-    console.log('Login: Response headers after cookie:', res.getHeaders());
-
+    console.log('Login: Token to return:', token.substring(0, 20) + '...');
+    
+    // Return token in response body instead of cookie
     const { password: _, ...userWithoutPassword } = user;
 
     res.json({
       message: 'Login successful',
       user: userWithoutPassword,
+      token: token, // Include token in response
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -419,26 +411,17 @@ export const oauthLogin = async (req: Request, res: Response) => {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     };
     
-    console.log('Backend: Setting cookie with options:', cookieOptions);
-    console.log('Backend: Token to set:', token.substring(0, 20) + '...');
-    
-    try {
-      res.cookie('token', token, cookieOptions);
-      console.log('Backend: Cookie set successfully');
-    } catch (cookieError) {
-      console.error('Backend: Error setting cookie:', cookieError);
-    }
-    
     console.log('Backend: Token length:', token.length);
     console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
     console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
-    console.log('Backend: Response headers after cookie:', res.getHeaders());
+    console.log('Backend: Token to return:', token.substring(0, 20) + '...');
 
     console.log('Backend: Sending successful response');
     res.json({
       message: 'OAuth login successful',
       user,
       isNewUser,
+      token: token, // Include token in response
     });
   } catch (error) {
     console.error('Backend: OAuth login error:', error);

@@ -48,16 +48,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       const response = await authApi.oauthLogin({ provider, accessToken, userData });
       console.log('Auth store: API response:', response);
       
-      if (response.user) {
+      if (response.user && response.token) {
         console.log('Auth store: Setting user and authentication state');
         console.log('Auth store: User data to set:', response.user);
+        console.log('Auth store: Token received:', response.token.substring(0, 20) + '...');
+        
         set({ user: response.user, isAuthenticated: true });
         if (typeof window !== 'undefined') {
-          localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
-          console.log('Auth store: Saved to localStorage');
+          localStorage.setItem('auth', JSON.stringify({ 
+            user: response.user, 
+            isAuthenticated: true,
+            token: response.token 
+          }));
+          console.log('Auth store: Saved to localStorage with token');
         }
       } else {
-        console.log('Auth store: No user in response');
+        console.log('Auth store: No user or token in response');
       }
 
       return response; 

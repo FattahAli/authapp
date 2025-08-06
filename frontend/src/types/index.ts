@@ -69,4 +69,5 @@ export interface ApiResponse<T = any> {
   pagination?: PaginationInfo;
   data?: T;
   isNewUser?: boolean;
+  token?: string;
 } 
