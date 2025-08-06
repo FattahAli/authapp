@@ -151,9 +151,16 @@ const login = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
         };
         console.log('Login: Setting cookie with options:', cookieOptions);
-        res.cookie('token', token, cookieOptions);
+        console.log('Login: Token to set:', token.substring(0, 20) + '...');
+        try {
+            res.cookie('token', token, cookieOptions);
+            console.log('Login: Cookie set successfully');
+        }
+        catch (cookieError) {
+            console.error('Login: Error setting cookie:', cookieError);
+        }
         console.log('Login: JWT token generated, length:', token.length);
-        console.log('Login: Cookie set successfully');
+        console.log('Login: Response headers after cookie:', res.getHeaders());
         const { password: _, ...userWithoutPassword } = user;
         res.json({
             message: 'Login successful',
@@ -346,11 +353,18 @@ const oauthLogin = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
         };
         console.log('Backend: Setting cookie with options:', cookieOptions);
-        res.cookie('token', token, cookieOptions);
+        console.log('Backend: Token to set:', token.substring(0, 20) + '...');
+        try {
+            res.cookie('token', token, cookieOptions);
+            console.log('Backend: Cookie set successfully');
+        }
+        catch (cookieError) {
+            console.error('Backend: Error setting cookie:', cookieError);
+        }
         console.log('Backend: Token length:', token.length);
         console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
         console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
-        console.log('Backend: Cookie set successfully');
+        console.log('Backend: Response headers after cookie:', res.getHeaders());
         console.log('Backend: Sending successful response');
         res.json({
             message: 'OAuth login successful',
