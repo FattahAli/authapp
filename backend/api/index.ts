@@ -18,10 +18,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     'http://localhost:3000', 
-    'http://localhost:3001', 
-    'https://authapp-frontend.vercel.app',
-    'https://authapp-frontend-git-main-fattahali.vercel.app',
-    'https://authapp-frontend-fattahali.vercel.app'
+    'https://authapp37.vercel.app',
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

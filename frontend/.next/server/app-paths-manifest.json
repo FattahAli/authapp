@@ -1,4 +1,11 @@
 {
-  "/users/page": "app/users/page.js",
-  "/page": "app/page.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/auth/callback/page": "app/auth/callback/page.js",
+  "/graphs/page": "app/graphs/page.js",
+  "/login/page": "app/login/page.js",
+  "/page": "app/page.js",
+  "/signup/page": "app/signup/page.js",
+  "/profile/page": "app/profile/page.js",
+  "/users/[id]/page": "app/users/[id]/page.js",
+  "/users/page": "app/users/page.js"
 }

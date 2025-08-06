@@ -16,7 +16,14 @@ const app = (0, express_1.default)();
 const PORT = process.env.PORT || 5000;
 app.use((0, helmet_1.default)());
 app.use((0, cors_1.default)({
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'https://authapp37.vercel.app',
+        'https://authapp-frontend.vercel.app',
+        'https://authapp-frontend-git-main-fattahali.vercel.app',
+        'https://authapp-frontend-fattahali.vercel.app'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
