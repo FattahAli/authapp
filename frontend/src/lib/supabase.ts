@@ -25,10 +25,17 @@ export async function getOAuthConfig() {
 // Function to sign in with Google using Supabase
 export async function signInWithGoogle() {
   try {
+    // Use environment variable for production, fallback to window.location.origin for development
+    const redirectUrl = process.env.NEXT_PUBLIC_SITE_URL 
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`
+      : `${typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000'}/auth/callback`;
+    
+    console.log('Google OAuth redirect URL:', redirectUrl);
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${typeof window !== 'undefined' ? window.location.origin : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`
+        redirectTo: redirectUrl
       }
     });
 
