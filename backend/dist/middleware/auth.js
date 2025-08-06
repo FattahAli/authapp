@@ -8,11 +8,16 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const database_1 = __importDefault(require("../config/database"));
 const authenticateToken = async (req, res, next) => {
     try {
+        console.log('Auth middleware: Checking authentication');
+        console.log('Auth middleware: Cookies:', req.cookies);
         const token = req.cookies.token;
         if (!token) {
+            console.log('Auth middleware: No token found in cookies');
             return res.status(401).json({ message: 'Access token required' });
         }
+        console.log('Auth middleware: Token found, verifying...');
         const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        console.log('Auth middleware: Token decoded, userId:', decoded.userId);
         const user = await database_1.default.user.findUnique({
             where: { id: decoded.userId },
             select: {
@@ -29,8 +34,10 @@ const authenticateToken = async (req, res, next) => {
             },
         });
         if (!user) {
+            console.log('Auth middleware: User not found in database');
             return res.status(401).json({ message: 'User not found' });
         }
+        console.log('Auth middleware: User found, authentication successful');
         req.user = {
             ...user,
             age: user.age || undefined,

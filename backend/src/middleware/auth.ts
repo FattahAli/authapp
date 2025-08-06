@@ -9,13 +9,18 @@ export const authenticateToken = async (
   next: NextFunction
 ) => {
   try {
+    console.log('Auth middleware: Checking authentication');
+    console.log('Auth middleware: Cookies:', req.cookies);
     const token = req.cookies.token;
 
     if (!token) {
+      console.log('Auth middleware: No token found in cookies');
       return res.status(401).json({ message: 'Access token required' });
     }
 
+    console.log('Auth middleware: Token found, verifying...');
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    console.log('Auth middleware: Token decoded, userId:', decoded.userId);
     
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
@@ -34,8 +39,11 @@ export const authenticateToken = async (
     });
 
     if (!user) {
+      console.log('Auth middleware: User not found in database');
       return res.status(401).json({ message: 'User not found' });
     }
+    
+    console.log('Auth middleware: User found, authentication successful');
 
     req.user = {
       ...user,

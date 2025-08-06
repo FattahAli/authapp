@@ -140,11 +140,18 @@ const login = async (req, res) => {
         };
         const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
         const token = signJWT(payload, jwtSecret);
+        console.log('Login: JWT token generated, length:', token.length);
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        console.log('Login: Cookie set with options:', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
         });
         const { password: _, ...userWithoutPassword } = user;
         res.json({

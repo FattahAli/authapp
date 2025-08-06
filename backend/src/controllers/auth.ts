@@ -170,6 +170,7 @@ export const login = async (req: Request, res: Response) => {
 
     const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
     const token = signJWT(payload, jwtSecret);
+    console.log('Login: JWT token generated, length:', token.length);
 
     // Set JWT in HttpOnly cookie
     res.cookie('token', token, {
@@ -177,6 +178,12 @@ export const login = async (req: Request, res: Response) => {
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    console.log('Login: Cookie set with options:', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
     const { password: _, ...userWithoutPassword } = user;
