@@ -50,9 +50,11 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       
       if (response.user) {
         console.log('Auth store: Setting user and authentication state');
+        console.log('Auth store: User data to set:', response.user);
         set({ user: response.user, isAuthenticated: true });
         if (typeof window !== 'undefined') {
           localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
+          console.log('Auth store: Saved to localStorage');
         }
       } else {
         console.log('Auth store: No user in response');

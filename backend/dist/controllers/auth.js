@@ -339,6 +339,15 @@ const oauthLogin = async (req, res) => {
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
+        console.log('Backend: Cookie set with options:', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+        console.log('Backend: Token length:', token.length);
+        console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
+        console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
         console.log('Backend: Sending successful response');
         res.json({
             message: 'OAuth login successful',
