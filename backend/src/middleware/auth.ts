@@ -8,6 +8,8 @@ export const authenticateToken = async (
   res: Response,
   next: NextFunction
 ) => {
+  let decoded: JWTPayload;
+
   try {
     console.log('Auth middleware: Checking authentication');
     console.log('Auth middleware: Cookies:', req.cookies);
@@ -19,7 +21,7 @@ export const authenticateToken = async (
     }
 
     console.log('Auth middleware: Token found, verifying...');
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
+    decoded = jwt.verify(token, process.env.JWT_SECRET!) as JWTPayload;
     console.log('Auth middleware: Token decoded, userId:', decoded.userId);
     
     const user = await prisma.user.findUnique({

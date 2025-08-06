@@ -67,5 +67,10 @@ app.use('*', (req, res) => {
 
 // Vercel serverless function handler
 export default function handler(req: any, res: any) {
+  console.log('API handler: Request method:', req.method);
+  console.log('API handler: Request URL:', req.url);
+  console.log('API handler: Request headers:', req.headers);
+  console.log('API handler: Request cookies:', req.cookies);
+  
   return app(req, res);
 } 

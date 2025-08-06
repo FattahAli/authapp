@@ -10,14 +10,25 @@ const authenticateToken = async (req, res, next) => {
     try {
         console.log('Auth middleware: Checking authentication');
         console.log('Auth middleware: Cookies:', req.cookies);
+        console.log('Auth middleware: JWT_SECRET exists:', !!process.env.JWT_SECRET);
+        console.log('Auth middleware: NODE_ENV:', process.env.NODE_ENV);
         const token = req.cookies.token;
         if (!token) {
             console.log('Auth middleware: No token found in cookies');
             return res.status(401).json({ message: 'Access token required' });
         }
         console.log('Auth middleware: Token found, verifying...');
-        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
-        console.log('Auth middleware: Token decoded, userId:', decoded.userId);
+        console.log('Auth middleware: Token length:', token.length);
+        console.log('Auth middleware: Token preview:', token.substring(0, 20) + '...');
+        let decoded;
+        try {
+            decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+            console.log('Auth middleware: Token decoded, userId:', decoded.userId);
+        }
+        catch (jwtError) {
+            console.log('Auth middleware: JWT verification failed:', jwtError);
+            throw jwtError;
+        }
         const user = await database_1.default.user.findUnique({
             where: { id: decoded.userId },
             select: {
