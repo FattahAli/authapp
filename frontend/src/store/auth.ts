@@ -25,10 +25,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     try {
       const response = await authApi.login({ email, password });
-      if (response.user) {
+      if (response.user && response.token) {
+        console.log('Auth store: Login successful, storing user and token');
         set({ user: response.user, isAuthenticated: true });
         if (typeof window !== 'undefined') {
-          localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
+          localStorage.setItem('auth', JSON.stringify({ 
+            user: response.user, 
+            isAuthenticated: true,
+            token: response.token 
+          }));
         }
       }
     } catch (error) {
@@ -79,10 +84,15 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ isLoading: true });
     try {
       const response = await authApi.signup(formData);
-      if (response.user) {
+      if (response.user && response.token) {
+        console.log('Auth store: Signup successful, storing user and token');
         set({ user: response.user, isAuthenticated: true });
         if (typeof window !== 'undefined') {
-          localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
+          localStorage.setItem('auth', JSON.stringify({ 
+            user: response.user, 
+            isAuthenticated: true,
+            token: response.token 
+          }));
         }
       }
     } catch (error) {
@@ -122,9 +132,23 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (response.user) {
         console.log('Auth store: getMe successful, setting user');
         set({ user: response.user, isAuthenticated: true });
-        // Persist auth state
+        // Persist auth state with existing token
         if (typeof window !== 'undefined') {
-          localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
+          const existingAuth = localStorage.getItem('auth');
+          let token = '';
+          if (existingAuth) {
+            try {
+              const { token: existingToken } = JSON.parse(existingAuth);
+              token = existingToken || '';
+            } catch (error) {
+              console.error('Error parsing existing auth data:', error);
+            }
+          }
+          localStorage.setItem('auth', JSON.stringify({ 
+            user: response.user, 
+            isAuthenticated: true,
+            token 
+          }));
         }
       } else {
         console.log('Auth store: getMe returned no user');
@@ -162,7 +186,22 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     set({ user, isAuthenticated: !!user });
     if (typeof window !== 'undefined') {
       if (user) {
-        localStorage.setItem('auth', JSON.stringify({ user, isAuthenticated: true }));
+        // Preserve existing token when setting user
+        const existingAuth = localStorage.getItem('auth');
+        let token = '';
+        if (existingAuth) {
+          try {
+            const { token: existingToken } = JSON.parse(existingAuth);
+            token = existingToken || '';
+          } catch (error) {
+            console.error('Error parsing existing auth data:', error);
+          }
+        }
+        localStorage.setItem('auth', JSON.stringify({ 
+          user, 
+          isAuthenticated: true,
+          token 
+        }));
       } else {
         localStorage.removeItem('auth');
       }
@@ -181,9 +220,13 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       try {
         const savedAuth = localStorage.getItem('auth');
         if (savedAuth) {
-          const { user, isAuthenticated } = JSON.parse(savedAuth);
+          const { user, isAuthenticated, token } = JSON.parse(savedAuth);
+          console.log('Auth store: Initializing from localStorage');
+          console.log('Auth store: User found:', !!user);
+          console.log('Auth store: Token found:', !!token);
           set({ user, isAuthenticated, isLoading: false });
         } else {
+          console.log('Auth store: No saved auth data found');
           set({ isLoading: false });
         }
       } catch (error) {
