@@ -106,6 +106,7 @@ export const signup = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
 
@@ -177,12 +178,14 @@ export const login = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     console.log('Login: Cookie set with options:', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 
@@ -205,6 +208,7 @@ export const logout = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
     });
 
     res.json({ message: 'Logout successful' });
@@ -399,6 +403,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
     
@@ -406,11 +411,13 @@ export const oauthLogin = async (req: Request, res: Response) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
     console.log('Backend: Token length:', token.length);
     console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
     console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
+    console.log('Backend: Response headers before cookie:', res.getHeaders());
 
     console.log('Backend: Sending successful response');
     res.json({

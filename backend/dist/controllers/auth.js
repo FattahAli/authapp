@@ -90,6 +90,7 @@ const signup = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         console.log('Signup completed successfully for user:', user.id);
@@ -145,12 +146,14 @@ const login = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         console.log('Login: Cookie set with options:', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
         const { password: _, ...userWithoutPassword } = user;
@@ -171,6 +174,7 @@ const logout = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
         });
         res.json({ message: 'Logout successful' });
     }
@@ -337,17 +341,20 @@ const oauthLogin = async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000,
         });
         console.log('Backend: Cookie set with options:', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
+            domain: process.env.NODE_ENV === 'production' ? '.vercel.app' : undefined,
             maxAge: 7 * 24 * 60 * 60 * 1000
         });
         console.log('Backend: Token length:', token.length);
         console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
         console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
+        console.log('Backend: Response headers before cookie:', res.getHeaders());
         console.log('Backend: Sending successful response');
         res.json({
             message: 'OAuth login successful',
