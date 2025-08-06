@@ -4,8 +4,8 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth';
-import userRoutes from './routes/users';
+import authRoutes from './src/routes/auth';
+import userRoutes from './src/routes/users';
 
 
 dotenv.config();
