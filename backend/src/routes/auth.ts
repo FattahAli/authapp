@@ -4,7 +4,7 @@ import { validateSignup, validateLogin, validatePasswordReset } from '../middlew
 import { authenticateToken } from '../middleware/auth';
 import upload from '../utils/upload';
 
-const router = Router();
+const router: Router = Router();
 
 router.post('/signup', upload.single('profilePicture'), validateSignup, signup);
 router.post('/login', validateLogin, login);

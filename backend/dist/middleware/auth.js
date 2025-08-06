@@ -1,0 +1,88 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.optionalAuth = exports.authenticateToken = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const database_1 = __importDefault(require("../config/database"));
+const authenticateToken = async (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ message: 'Access token required' });
+        }
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        const user = await database_1.default.user.findUnique({
+            where: { id: decoded.userId },
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                age: true,
+                gender: true,
+                profilePicture: true,
+                oauthProvider: true,
+                oauthId: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        if (!user) {
+            return res.status(401).json({ message: 'User not found' });
+        }
+        req.user = {
+            ...user,
+            age: user.age || undefined,
+            profilePicture: user.profilePicture || undefined,
+            oauthProvider: user.oauthProvider || undefined,
+            oauthId: user.oauthId || undefined,
+            gender: user.gender
+        };
+        next();
+    }
+    catch (error) {
+        return res.status(401).json({ message: 'Invalid token' });
+    }
+};
+exports.authenticateToken = authenticateToken;
+const optionalAuth = async (req, res, next) => {
+    try {
+        const token = req.cookies.token;
+        if (!token) {
+            return next();
+        }
+        const decoded = jsonwebtoken_1.default.verify(token, process.env.JWT_SECRET);
+        const user = await database_1.default.user.findUnique({
+            where: { id: decoded.userId },
+            select: {
+                id: true,
+                email: true,
+                name: true,
+                age: true,
+                gender: true,
+                profilePicture: true,
+                oauthProvider: true,
+                oauthId: true,
+                createdAt: true,
+                updatedAt: true,
+            },
+        });
+        if (user) {
+            req.user = {
+                ...user,
+                age: user.age || undefined,
+                profilePicture: user.profilePicture || undefined,
+                oauthProvider: user.oauthProvider || undefined,
+                oauthId: user.oauthId || undefined,
+                gender: user.gender
+            };
+        }
+        next();
+    }
+    catch (error) {
+        next();
+    }
+};
+exports.optionalAuth = optionalAuth;
+//# sourceMappingURL=auth.js.map

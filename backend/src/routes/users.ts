@@ -4,7 +4,7 @@ import { validateProfileUpdate } from '../middleware/validation';
 import { authenticateToken, optionalAuth } from '../middleware/auth';
 import upload from '../utils/upload';
 
-const router = Router();
+const router: Router = Router();
 
 // Protected routes
 router.put('/profile', authenticateToken, upload.single('profilePicture'), validateProfileUpdate, updateProfile);

@@ -169,9 +169,7 @@ export const login = async (req: Request, res: Response) => {
     };
 
     const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
-    const token = jwt.sign(payload, jwtSecret as string, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    });
+    const token = signJWT(payload, jwtSecret);
 
     // Set JWT in HttpOnly cookie
     res.cookie('token', token, {
@@ -385,9 +383,7 @@ export const oauthLogin = async (req: Request, res: Response) => {
     };
 
     const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
-    const token = jwt.sign(payload, jwtSecret as string, {
-      expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    });
+    const token = signJWT(payload, jwtSecret);
 
     console.log('Backend: JWT token generated for user:', user.id);
 
