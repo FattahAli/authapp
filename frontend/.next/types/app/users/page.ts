@@ -1,4 +1,4 @@
-// File: /home/fattahali37/Desktop/FYP/auth-app/frontend/src/app/users/page.tsx
+// File: /home/fattahali37/Documents/Projects/authapp/frontend/src/app/users/page.tsx
 import * as entry from '../../../../src/app/users/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

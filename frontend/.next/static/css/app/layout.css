@@ -717,6 +717,9 @@ video {
 .mt-1 {
   margin-top: 0.25rem;
 }
+.mt-10 {
+  margin-top: 2.5rem;
+}
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -728,24 +731,6 @@ video {
 }
 .mt-8 {
   margin-top: 2rem;
-}
-.mt-\[580px\] {
-  margin-top: 580px;
-}
-.mt-\[5px\] {
-  margin-top: 5px;
-}
-.mt-\[px\] {
-  margin-top: px;
-}
-.mt-\[70px\] {
-  margin-top: 70px;
-}
-.mt-\[500px\] {
-  margin-top: 500px;
-}
-.mt-10 {
-  margin-top: 2.5rem;
 }
 .flex {
   display: flex;
