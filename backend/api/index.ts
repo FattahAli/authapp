@@ -68,5 +68,7 @@ app.use('*', (req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Export for Vercel serverless function
-export default app; 
+// Vercel serverless function handler
+export default function handler(req: any, res: any) {
+  return app(req, res);
+} 
