@@ -19,15 +19,15 @@ export default function PublicRoute({
   const hasFailedAuth = useRef(false);
 
   useEffect(() => {
-    // Only check auth if we haven't checked before and haven't failed
-    if (!hasCheckedAuth.current && !hasFailedAuth.current) {
+    // Only check auth if we haven't checked before, haven't failed, and user is not already authenticated
+    if (!hasCheckedAuth.current && !hasFailedAuth.current && !isAuthenticated) {
       hasCheckedAuth.current = true;
       getMe().catch(() => {
         // If getMe fails, mark as failed to prevent further calls
         hasFailedAuth.current = true;
       });
     }
-  }, [getMe]);
+  }, [getMe, isAuthenticated]);
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {

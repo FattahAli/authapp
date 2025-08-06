@@ -16,7 +16,7 @@ export default function HomePage() {
   }, [initialize]);
 
   useEffect(() => {
-    if (isInitialized && !isLoading) {
+    if (isInitialized && !isLoading && !isAuthenticated) {
       const checkAuth = async () => {
         try {
           await getMe();
@@ -27,7 +27,7 @@ export default function HomePage() {
 
       checkAuth();
     }
-  }, [isInitialized, isLoading, getMe]);
+  }, [isInitialized, isLoading, getMe, isAuthenticated]);
 
   useEffect(() => {
     if (isInitialized && !isLoading) {
