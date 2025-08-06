@@ -102,12 +102,16 @@ export const signup = async (req: Request, res: Response) => {
     const token = signJWT(payload, jwtSecret);
 
     // Set JWT in HttpOnly cookie
-    res.cookie('token', token, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: false, // Set to false for now to test
+      sameSite: 'lax' as const,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
+    
+    console.log('Signup: Setting cookie with options:', cookieOptions);
+    res.cookie('token', token, cookieOptions);
+    console.log('Signup: Cookie set successfully');
 
     console.log('Signup completed successfully for user:', user.id);
 
@@ -173,13 +177,17 @@ export const login = async (req: Request, res: Response) => {
     console.log('Login: JWT token generated, length:', token.length);
 
     // Set JWT in HttpOnly cookie
-    res.cookie('token', token, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: false, // Set to false for now to test
+      sameSite: 'lax' as const,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
+    
+    console.log('Login: Setting cookie with options:', cookieOptions);
+    res.cookie('token', token, cookieOptions);
     console.log('Login: JWT token generated, length:', token.length);
+    console.log('Login: Cookie set successfully');
 
     const { password: _, ...userWithoutPassword } = user;
 
@@ -396,16 +404,19 @@ export const oauthLogin = async (req: Request, res: Response) => {
     console.log('Backend: JWT token generated for user:', user.id);
 
     // Set JWT in HttpOnly cookie
-    res.cookie('token', token, {
+    const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      secure: false, // Set to false for now to test
+      sameSite: 'lax' as const,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
+    };
     
+    console.log('Backend: Setting cookie with options:', cookieOptions);
+    res.cookie('token', token, cookieOptions);
     console.log('Backend: Token length:', token.length);
     console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
     console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
+    console.log('Backend: Cookie set successfully');
 
     console.log('Backend: Sending successful response');
     res.json({

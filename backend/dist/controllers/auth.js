@@ -86,12 +86,15 @@ const signup = async (req, res) => {
             console.warn('JWT_SECRET not set, using fallback secret');
         }
         const token = signJWT(payload, jwtSecret);
-        res.cookie('token', token, {
+        const cookieOptions = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        };
+        console.log('Signup: Setting cookie with options:', cookieOptions);
+        res.cookie('token', token, cookieOptions);
+        console.log('Signup: Cookie set successfully');
         console.log('Signup completed successfully for user:', user.id);
         res.status(201).json({
             message: 'User created successfully',
@@ -141,13 +144,16 @@ const login = async (req, res) => {
         const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
         const token = signJWT(payload, jwtSecret);
         console.log('Login: JWT token generated, length:', token.length);
-        res.cookie('token', token, {
+        const cookieOptions = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        };
+        console.log('Login: Setting cookie with options:', cookieOptions);
+        res.cookie('token', token, cookieOptions);
         console.log('Login: JWT token generated, length:', token.length);
+        console.log('Login: Cookie set successfully');
         const { password: _, ...userWithoutPassword } = user;
         res.json({
             message: 'Login successful',
@@ -333,15 +339,18 @@ const oauthLogin = async (req, res) => {
         const jwtSecret = process.env.JWT_SECRET || 'fallback-secret';
         const token = signJWT(payload, jwtSecret);
         console.log('Backend: JWT token generated for user:', user.id);
-        res.cookie('token', token, {
+        const cookieOptions = {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: false,
             sameSite: 'lax',
             maxAge: 7 * 24 * 60 * 60 * 1000,
-        });
+        };
+        console.log('Backend: Setting cookie with options:', cookieOptions);
+        res.cookie('token', token, cookieOptions);
         console.log('Backend: Token length:', token.length);
         console.log('Backend: JWT_SECRET exists:', !!process.env.JWT_SECRET);
         console.log('Backend: NODE_ENV:', process.env.NODE_ENV);
+        console.log('Backend: Cookie set successfully');
         console.log('Backend: Sending successful response');
         res.json({
             message: 'OAuth login successful',
