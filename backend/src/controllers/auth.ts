@@ -211,13 +211,19 @@ export const logout = async (req: Request, res: Response) => {
 
 export const getMe = async (req: Request, res: Response) => {
   try {
+    console.log('GetMe: Endpoint called');
+    console.log('GetMe: Request cookies:', req.cookies);
+    console.log('GetMe: Request user:', (req as any).user);
+    
     // The user is already attached to req by the auth middleware
     const user = (req as any).user;
     
     if (!user) {
+      console.log('GetMe: No user found, returning 401');
       return res.status(401).json({ message: 'Not authenticated' });
     }
 
+    console.log('GetMe: User found, returning user data');
     res.json({ user });
   } catch (error) {
     console.error('Get me error:', error);

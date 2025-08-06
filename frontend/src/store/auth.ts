@@ -109,22 +109,32 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   getMe: async () => {
     set({ isLoading: true });
     try {
+      console.log('Auth store: Calling getMe to verify authentication');
       const response = await authApi.getMe();
+      console.log('Auth store: getMe response:', response);
+      
       if (response.user) {
+        console.log('Auth store: getMe successful, setting user');
         set({ user: response.user, isAuthenticated: true });
         // Persist auth state
         if (typeof window !== 'undefined') {
           localStorage.setItem('auth', JSON.stringify({ user: response.user, isAuthenticated: true }));
         }
       } else {
+        console.log('Auth store: getMe returned no user');
         set({ user: null, isAuthenticated: false });
         if (typeof window !== 'undefined') {
           localStorage.removeItem('auth');
         }
       }
     } catch (error: any) {
+      console.log('Auth store: getMe error:', error);
+      console.log('Auth store: Error status:', error.response?.status);
+      console.log('Auth store: Error message:', error.response?.data?.message);
+      
       // If user is not authenticated 
       if (error.response?.status === 401) {
+        console.log('Auth store: 401 error, logging out user');
         set({ user: null, isAuthenticated: false });
         if (typeof window !== 'undefined') {
           localStorage.removeItem('auth');

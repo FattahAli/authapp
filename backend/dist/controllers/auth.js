@@ -177,10 +177,15 @@ const logout = async (req, res) => {
 exports.logout = logout;
 const getMe = async (req, res) => {
     try {
+        console.log('GetMe: Endpoint called');
+        console.log('GetMe: Request cookies:', req.cookies);
+        console.log('GetMe: Request user:', req.user);
         const user = req.user;
         if (!user) {
+            console.log('GetMe: No user found, returning 401');
             return res.status(401).json({ message: 'Not authenticated' });
         }
+        console.log('GetMe: User found, returning user data');
         res.json({ user });
     }
     catch (error) {
